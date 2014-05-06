@@ -13,19 +13,12 @@
 <% if current_user %>
 	<h4>Write a review...</h4>
 
-	<%= form_for([@product, @review]) do |f| %>
-		<% if @review.errors.any? %>
-			<div id="error_explanations">
-				<h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
-
-				<ul>
-					<% @review.errors.full_messages.each do |msg| %>
-						<li><%= msg %></li>
-					<% end %>
-				</ul>
-
-			</div>
-		<% end %>
+	<%= form_for([@product, @review], remote: true) do |f| %>
+		<div id="review-form-errors">
+			<% if @review.errors.any? %>
+				<%= render 'reviews/errors' %>
+			<% end %>
+		</div>
 	
 	
 		<div class="field">
@@ -39,16 +32,13 @@
 
 	<p><b>Reviews for:</b> <%= @product.name %></p>
 
-	<% @product.reviews.each do |review| %>
-		<p>
-			<%= review.comment %>
-			<br/>
-			<% if review.user != nil %>
-				<em>by <%=review.user.email %></em>
-				Added on: <%=review.created_at %>
+ 	<div id="reviews-list">
+		<% @product.reviews.each do |review| %>
+			<% if review.id.present? %>
+				<%= render partial: 'reviews/review', locals: {review: review} %>
 			<% end %>
-		</p>
-	<% end %>
+		<% end %>
+	</div>
 
 <% end %>
 

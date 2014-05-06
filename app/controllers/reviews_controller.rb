@@ -17,10 +17,14 @@ class ReviewsController < ApplicationController
   # )
 		session[:return_to] ||= request.referer
 
-		if @review.save
-			redirect_to session.delete(:return_to), notice: 'Review created successfully'
-		else
-			render :action=>:show
+		respond_to do |format|
+			if @review.save
+				format.html {redirect_to session.delete(:return_to), notice: 'Review created successfully'}
+				format.js{}
+			else
+				format.html{ render 'products/show', alert: 'There was an error' }
+				format.js
+			end
 		end
 	end
 
