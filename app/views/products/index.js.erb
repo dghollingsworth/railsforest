@@ -1,0 +1,4 @@
+
+$('#products').append("<%= j(render @products) %>");
+$('#products-pagination').html("<%= j(paginate @products) %>");
+$('#products-count').html("<% j(page_entries_info @products) %>");
